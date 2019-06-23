@@ -55,7 +55,7 @@ var View = (function () {
             var li = document.createElement("li");
             li.innerHTML = `
             <input type="checkbox" class="checkbox">
-            <span class="precrtano">${itemToShow}</span>`;
+            <span class="crossout">${itemToShow}</span>`;
             document.querySelector(DOMstrings.list).appendChild(li)
         },
 

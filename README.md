@@ -7,7 +7,7 @@ Add or remove item from the list
 
 ```
 • the 'add new to-do' button click should create a new <li> and inside it 
-  <input> type checkbox and <span> with the contents from input field
+  <input> type checkbox and <span> with the content from input field
 
 • checking the checkbox should cross the <span> content (CSS solution)   
 

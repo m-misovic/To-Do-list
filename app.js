@@ -1,4 +1,4 @@
-var Model = (function () {
+var model = (function () {
 
     var itemList = [];
 
@@ -24,7 +24,7 @@ var Model = (function () {
 })();
 
 
-var View = (function () {
+var view = (function () {
 
     var DOMstrings = {
         addBtn: '#button1',
@@ -79,7 +79,7 @@ var View = (function () {
 })();
 
 
-var Controller = (function (dataStorage, userInterface) {
+var controller = (function (dataStorage, userInterface) {
 
     var setupEventListeners = function () {
         var DOM = userInterface.getDOMstrings();
@@ -114,6 +114,6 @@ var Controller = (function (dataStorage, userInterface) {
         }
     };
 
-})(Model, View);
+})(model, view);
 
-Controller.init();
+controller.init();

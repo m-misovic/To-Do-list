@@ -1,70 +1,126 @@
 * {
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  background-color: rgb(77, 68, 68);
-  color: white;
+	font-family: 'Comfortaa', cursive;
+	background-color: rgb(77, 68, 68);
+	color: white;
 }
 
-input[type="checkbox"]:checked + span.crossout {
-  text-decoration: line-through;
-  text-decoration-color: rgb(255, 61, 61);
+.main {
+	margin-left: 30px;
+	/* width: 60%; */
 }
 
 h1 {
-  font-size: 60px;
-  margin: auto;
-  margin-top: 100px;
-  text-align: left;
+	font-size: 60px;
+	margin-top: 100px;
+	text-align: left;
 }
 
-p {
-  margin: auto;
-  margin-top: 60px;
-  text-align: left;
+.input-container {
+	width: 100%;
+	margin-top: 60px;
+	text-align: left;
+	display: flex;
+	justify-content: flex-start;
+}
+
+#user-input {
+	height: 35px;
+	width: 35%;
+	border: none;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	font-size: 18px;
+	font-weight: 500;
+	text-align: left;
+	padding: 0 0 0 15px;
+	color: rgb(71, 63, 63);
+	background: rgb(228, 228, 228);
+}
+
+input::placeholder {
+	color: rgb(255, 255, 255);
+	font-weight: 100;
+}
+
+input:focus {
+	outline: none;
+}
+
+#add-button {
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+#add-button::after {
+	content: 'Add new to-do';
+}
+
+#remove-button::after {
+	content: 'Remove from list';
 }
 
 button {
-  border-radius: 10px;
-  border: 1px solid rgb(255, 255, 255);
-  font-size: 18px;
-  color: rgb(71, 63, 63);
-  height: 38px;
-  width: 150px;
-  background: white;
+	border-radius: 5px;
+	border: none;
+	font-size: 18px;
+	font-weight: 500;
+	color: rgb(71, 63, 63);
+	height: 35px;
+	width: fit-content;
+	background: white;
+	padding: 0 10px;
+	cursor: pointer;
+	outline: none;
 }
 
-button:hover {
-  transform: scale(1.05);
-}
-
-#userInput {
-  height: 35px;
-  width: 200px;
-  border: 1px solid rgb(255, 255, 255);
-  border-radius: 10px;
-  font-size: 18px;
-  text-align: left;
-  padding: 18px;
-  color: rgb(71, 63, 63);
-  background: white;
-  margin-right: 30px;
-  margin-bottom: 20px;
-}
-
-span {
-  font-size: 20px;
-  margin: auto;
-  text-align: left;
+#error-div {
+	font-size: 13px;
+	padding: 5px 15px;
+	height: 20px;
+	color: rgb(255, 77, 77);
 }
 
 ul {
-  font-size: 20px;
-  margin: auto;
-  margin-top: 18px;
-  margin-left: 5px;
-  text-align: left;
+	font-size: 18px;
+	margin: 0px 0 40px 0;
+	text-align: left;
+	list-style-type: none;
+	padding-left: 10px;
+}
+li {
+	margin: 8px 0;
+	display: flex;
+	align-items: center;
 }
 
-div {
-  margin: auto;
-  width: 60%;
+input[type='checkbox']:checked + label.crossout {
+	text-decoration: line-through solid rgb(255, 61, 61);
+}
+
+label {
+	margin-left: 5px;
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 800px) {
+	.main {
+		margin: 0;
+	}
+	h1 {
+		margin: 10px 0;
+	}
+	.input-container {
+		margin: 10px 0 0 0;
+	}
+	#user-input {
+		width: 100%;
+	}
+	#add-button::after {
+		content: 'Add';
+	}
+	#remove-button::after {
+		content: 'Remove';
+	}
 }

@@ -1,32 +1,31 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<link
+			href="https://fonts.googleapis.com/css?family=Comfortaa:300,400,500,600,700&display=swap&subset=cyrillic-ext"
+			rel="stylesheet"
+		/>
+		<link type="text/css" rel="stylesheet" href="style.css" />
+		<title>My Check List</title>
+	</head>
 
-<head>
-	<title>My Check List</title>
-	<link type="text/css" rel="stylesheet" href="style.css">
-</head>
+	<body>
+		<div class="main">
+			<h1>My Check List</h1>
+			<div class="input-container">
+				<input type="text" id="user-input" placeholder="something to-do..." />
+				<button id="add-button"></button>
+			</div>
+			<div id="error-div"></div>
+			<ul id="my-list"></ul>
+			<div>
+				<button id="remove-button"></button>
+			</div>
+		</div>
 
-<body>
-	<div>
-		<h1>My Check List</h1>
-
-		<!-- Here I create a paragraph with add button and a box with input space -->
-		<p>
-			<input type="text" id="userInput"></input>
-			<button id="button1">Add new to-do</button>
-		</p>
-
-		<!-- Here I create unordered list, and user will put TODO on it -->
-		<ul id="myList">
-		</ul>
-
-		<!-- Here I create a paragraph with delete button -->
-		<p>
-			<button id="button2">Remove from list</button>
-		</p>
-	</div>
-	<script src="app.js"></script>
-	<!-- <script src="script.js"></script> -->
-
-</body>
-
+		<script src="app.js"></script>
+	</body>
 </html>

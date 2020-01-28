@@ -1,112 +1,146 @@
-var model = (function() {
-  var itemList = [];
+const model = (() => {
+	return {
+		storedItems: () => {
+			return JSON.parse(localStorage.getItem('TO-DO-ITEMS')) || [];
+		},
 
-  return {
-    addItemToDB: function(itemToAdd) {
-      itemList.push(itemToAdd);
-      return itemToAdd;
-    },
+		addToStorage: item => {
+			let lowercaseItem = item.toLowerCase().replace(/\s/g, '');
+			let lowercaseArray = model.storedItems().map(item => {
+				return item.toLowerCase().replace(/\s/g, '');
+			});
+			if (lowercaseArray.indexOf(lowercaseItem) === -1) {
+				let temp = model.storedItems();
+				temp.push(item.trim());
+				localStorage.setItem('TO-DO-ITEMS', JSON.stringify(temp));
+				return item.trim();
+			}
+		},
 
-    removeItemFromDB: function(itemsToRemove) {
-      var temp = itemList.filter(function(item, index) {
-        if (itemsToRemove.indexOf(index) == -1) return item;
-      });
-      itemList = temp;
-      return itemsToRemove;
-    },
-
-    printItemList: function() {
-      console.log("Item list: " + itemList);
-    }
-  };
+		removeFromStorage: indexesToRemove => {
+			let temp = model.storedItems().filter((item, i) => {
+				if (indexesToRemove.indexOf(i) === -1) return item;
+			});
+			localStorage.setItem('TO-DO-ITEMS', JSON.stringify(temp));
+			return indexesToRemove;
+		}
+	};
 })();
 
-var view = (function() {
-  var DOMstrings = {
-    addBtn: "#button1",
-    removeBtn: "#button2",
-    input: "#userInput",
-    list: "#myList",
-    checkbox: ".checkbox"
-  };
+const view = (() => {
+	const DOMstrings = {
+		addBtn: '#add-button',
+		removeBtn: '#remove-button',
+		input: '#user-input',
+		list: '#my-list',
+		checkbox: '.checkbox',
+		errorDiv: '#error-div'
+	};
 
-  return {
-    getInput: function() {
-      return document.querySelector(DOMstrings.input).value;
-    },
+	return {
+		inputValue: () => {
+			return document.querySelector(DOMstrings.input).value;
+		},
 
-    lookForChecked: function() {
-      var box = document.querySelectorAll(DOMstrings.checkbox);
-      arrayOfIndex = [];
+		indexesOfChecked: () => {
+			let checkboxes = document.querySelectorAll(DOMstrings.checkbox);
+			let indexes = [];
+			for (i = 0; i < checkboxes.length; i++) {
+				if (checkboxes[i].checked === true) {
+					indexes.push(i);
+				}
+			}
+			return indexes;
+		},
 
-      for (i = 0; i < box.length; i++) {
-        if (box[i].checked === true) {
-          arrayOfIndex.push(i);
-        }
-      }
-      return arrayOfIndex;
-    },
+		showStoredItems: items => {
+			if (items.length > 0) {
+				const list = document.querySelector(DOMstrings.list);
+				items.map(item => {
+					list.innerHTML += `<li>
+											<input type="checkbox" class="checkbox" id=${item.toLowerCase().replace(/\s/g, '')}>
+											<label class="crossout" for=${item.toLowerCase().replace(/\s/g, '')}>${item}</label>
+										</li>`;
+				});
+			}
+		},
 
-    showItemOnPage: function(itemToShow) {
-      var li = document.createElement("li");
-      li.innerHTML = `
-            <input type="checkbox" class="checkbox">
-            <span class="crossout">${itemToShow}</span>`;
-      document.querySelector(DOMstrings.list).appendChild(li);
-    },
+		addItemOnPage: item => {
+			let li = document.createElement('li');
+			li.innerHTML = `<input type="checkbox" class="checkbox" 
+							id=${item.toLowerCase().replace(/\s/g, '')}>
+							<label class="crossout" for=${item.toLowerCase().replace(/\s/g, '')}>${item}</label>`;
+			document.querySelector(DOMstrings.list).appendChild(li);
+		},
 
-    removeItemFromPage: function(ItemsToRemove) {
-      var list = document.querySelector(DOMstrings.list);
-      var box = document.querySelectorAll(DOMstrings.checkbox);
-      ItemsToRemove.map(function(i) {
-        list.removeChild(box[i].parentElement);
-      });
-    },
+		removeItemFromPage: itemsToRemove => {
+			const list = document.querySelector(DOMstrings.list);
+			let checkboxes = document.querySelectorAll(DOMstrings.checkbox);
+			itemsToRemove.map(i => {
+				list.removeChild(checkboxes[i].parentElement);
+			});
+		},
 
-    clearInputField: function() {
-      document.querySelector(DOMstrings.input).value = "";
-      document.querySelector(DOMstrings.input).focus();
-    },
+		clearInputField: () => {
+			document.querySelector(DOMstrings.input).value = '';
+			document.querySelector(DOMstrings.input).focus();
+		},
 
-    getDOMstrings: function() {
-      return DOMstrings;
-    }
-  };
+		printError: message => {
+			const errorField = document.querySelector(DOMstrings.errorDiv);
+			errorField.innerText = message;
+			setTimeout(() => {
+				errorField.innerText = '';
+			}, 1500);
+		},
+
+		getDOMstrings: () => {
+			return DOMstrings;
+		}
+	};
 })();
 
-var controller = (function(dataStorage, userInterface) {
-  var setupEventListeners = function() {
-    var DOM = userInterface.getDOMstrings();
+const controller = ((dataStorage, userInterface) => {
+	const setupEventListeners = () => {
+		const DOM = userInterface.getDOMstrings();
+		document.addEventListener('keypress', event => {
+			if (event.keyCode === 13 || event.which === 13) {
+				addItem();
+			}
+		});
+		document.querySelector(DOM.addBtn).addEventListener('click', addItem);
+		document.querySelector(DOM.removeBtn).addEventListener('click', deleteItem);
+	};
 
-    document.addEventListener("keypress", function(event) {
-      if (event.keyCode === 13 || event.which === 13) {
-        addItem();
-      }
-    });
-    document.querySelector(DOM.addBtn).addEventListener("click", addItem);
-    document.querySelector(DOM.removeBtn).addEventListener("click", deleteItem);
-  };
+	const addItem = () => {
+		let input = userInterface.inputValue();
+		if (input !== '') {
+			let newItem = dataStorage.addToStorage(input);
+			if (newItem) {
+				userInterface.addItemOnPage(newItem);
+				userInterface.clearInputField();
+			} else {
+				userInterface.printError('item is aleredy in the list');
+			}
+		} else {
+			userInterface.printError('please enter something you want to do');
+		}
+	};
 
-  var addItem = function() {
-    var input = userInterface.getInput();
-    var newItem = dataStorage.addItemToDB(input);
-    userInterface.showItemOnPage(newItem);
-    userInterface.clearInputField();
-    dataStorage.printItemList();
-  };
+	const deleteItem = () => {
+		let indexesToRemove = userInterface.indexesOfChecked();
+		if (indexesToRemove.length !== 0) {
+			let itemsRemovedFromStorage = dataStorage.removeFromStorage(indexesToRemove);
+			userInterface.removeItemFromPage(itemsRemovedFromStorage);
+		}
+	};
 
-  var deleteItem = function() {
-    var checkedItems = userInterface.lookForChecked();
-    var itemsRemovedFromDB = dataStorage.removeItemFromDB(checkedItems);
-    userInterface.removeItemFromPage(itemsRemovedFromDB);
-    dataStorage.printItemList();
-  };
-
-  return {
-    init: function() {
-      setupEventListeners();
-    }
-  };
+	return {
+		init: () => {
+			userInterface.showStoredItems(dataStorage.storedItems());
+			setupEventListeners();
+		}
+	};
 })(model, view);
 
 controller.init();

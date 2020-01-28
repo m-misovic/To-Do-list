@@ -29,6 +29,8 @@ h1 {
 	border: none;
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
 	font-size: 18px;
 	font-weight: 500;
 	text-align: left;
